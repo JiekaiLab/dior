@@ -1,5 +1,5 @@
 # RIOH5
-scRNA-seq data IO between R and Python (R version)
+single-cell data IO between R and Python (R version)
 
 
 
@@ -7,6 +7,6 @@ scRNA-seq data IO between R and Python (R version)
 
 ```R
 install.packages('devtools')
-devtools::install_github('JiekaiLab/RIOH5@HEAD')
+devtools::install_github('JiekaiLab/dior@HEAD')
 ```
 
