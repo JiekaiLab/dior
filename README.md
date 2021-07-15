@@ -1,4 +1,4 @@
-# RIOH5
+# dior
 single-cell data IO between R and Python (R version)
 
 
@@ -7,6 +7,7 @@ single-cell data IO between R and Python (R version)
 
 ```R
 install.packages('devtools')
-devtools::install_github('JiekaiLab/dior@HEAD')
+devtools::install_github('JiekaiLab/dior')
+# devtools::install_github('JiekaiLab/dior@HEAD')
 ```
 
