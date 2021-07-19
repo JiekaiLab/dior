@@ -331,7 +331,7 @@ read_h5 <- function(file, target.object = 'seurat', assay.name = 'RNA'){
 #'
 write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', save.graphs = FALSE, save.scale=FALSE){
   if(object.type == 'seurat'){
-    seurat_write_h5(seurat = data, file = file, assay.name = assay.name, save.graphs = save.graphs)
+    seurat_write_h5(seurat = data, file = file, assay.name = assay.name, save.graphs = save.graphs, save.scale = save.scale)
   }
   if(object.type == 'singlecellexperiment'){
     sce_write_h5(sce = data, file = file, assay.name = assay.name)
