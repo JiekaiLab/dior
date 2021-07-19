@@ -241,19 +241,20 @@ seurat_to_h5 <- function(seurat=NULL, h5=NULL, assay.name = NULL, save.graphs = 
         }
       }
     }
+    # save the layer
+    if(length(setdiff(names(seurat@assays), assay.name)) > 0){
+      layer = h5$create_group('layer')
+      for(s in setdiff(names(seurat@assays), assay.name)){
+        slot_layer <- slot(object = seurat, name = 'assays')[[s]]
+        matrix_to_h5(mat = slot_layer@data, h5 = layer, gr_name = s)
+
+      }
+    }
     #--- save the metadata colors
     if('uns' %in% names(seurat@misc)){
       uns <- h5$create_group('uns')
       for(colr in grep('colors', seurat@misc[['uns']], value = TRUE)){
         uns[[colr]] <- seurat@misc[['uns']][[colr]]
-      }
-    }
-    if('layer' %in% names(seurat@misc)){
-      if(!('layer' %in% names(h5))){
-        layer = h5$create_group('layer')
-      }
-      for(l in names(seurat@misc[['layer']])){
-        matrix_to_h5(mat = seurat@misc[['layer']][[l]], h5 = layer, gr_name = l)
       }
     }
   }
