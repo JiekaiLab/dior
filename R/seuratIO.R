@@ -333,7 +333,7 @@ h5_to_spatial <- function(h5spa){
         for(sf in v1){
           sf_list[[sf]] <- sid_h5[[me]][[grep(sf,names(sid_h5[[me]]), value = TRUE)]][]
         }
-        sf_o <- Seurat::scalefactors(spot = sf_list$spot, fiducial = sf_list$fiducial, hires = sf_list$hiresk, lowres = sf_list$lowres)
+        sf_o <- Seurat::scalefactors(spot = sf_list$spot, fiducial = sf_list$fiducial, hires = sf_list$hires, lowres = sf_list$lowres)
         spatial_sid_list[[me]] <- sf_o
       }
       if('coor' == me){
