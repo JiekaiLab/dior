@@ -206,8 +206,8 @@ seurat_to_h5 <- function(seurat=NULL, h5=NULL, assay.name = NULL, save.graphs = 
     if(all(slot_assay@data[,1] == slot_assay@counts[,1])){
       matrix_to_h5(mat = slot(object = slot_assay, name = 'counts'), h5 = data, gr_name = n1)
     }else{
-      layer = h5$create_group('layer')
-      matrix_to_h5(mat = slot(object = slot_assay, name = 'counts'), h5 = layer, gr_name= 'counts')
+      layers = h5$create_group('layers')
+      matrix_to_h5(mat = slot(object = slot_assay, name = 'counts'), h5 = layers, gr_name= 'counts')
       matrix_to_h5(mat = slot(object = slot_assay, name = 'data'), h5 = data, gr_name = n1)
     }
     if(!is.null(sdata)){
@@ -243,10 +243,12 @@ seurat_to_h5 <- function(seurat=NULL, h5=NULL, assay.name = NULL, save.graphs = 
     }
     # save the layer
     if(length(setdiff(names(seurat@assays), assay.name)) > 0){
-      layer = h5$create_group('layer')
+      if(! 'layers' %in% names(h5)){
+        layers = h5$create_group('layers')
+      }
       for(s in setdiff(names(seurat@assays), assay.name)){
         slot_layer <- slot(object = seurat, name = 'assays')[[s]]
-        matrix_to_h5(mat = slot_layer@data, h5 = layer, gr_name = s)
+        matrix_to_h5(mat = slot_layer@data, h5 = layers, gr_name = s)
 
       }
     }
