@@ -339,6 +339,29 @@ write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', sav
 }
 
 
+#--- read_h5 part
+
+#' The read the some data in the h5 fiel
+#' @param h5 the h5 file
+#' @param groups the h5 groups
+#'
+#' @export
+read_h5part <- function(h5, groups){
+  h5_list <- list()
+  for(h in groups){
+    h5_list[[h]] <- switch(h, data = to_data_(h5),
+                               obs = to_obs_(h5),
+                               var = to_var_(h5),
+                               dimR = seurat.to_dimr_(h5),
+                               layers = to_layers_(h5),
+                               graphs = to_graphs_(h5),
+                               spatial = seurat.to_spatial_(h5),
+                               uns = to_uns_(h5))
+  }
+  return(h5_list)
+}
+
+
 
 
 
