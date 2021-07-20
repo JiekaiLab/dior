@@ -17,5 +17,7 @@ Imports:
     SummarizedExperiment,
     Hmisc,
     methods
+SystemRequirements:
+    python
 URL: https://github.com/JiekaiLab/scDIOR, https://github.com/JiekaiLab/dior
 RoxygenNote: 7.1.1

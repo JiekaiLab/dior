@@ -361,11 +361,16 @@ read_h5part <- function(h5, groups){
   return(h5_list)
 }
 
-
-
-
-
-
+#--- read the h5ad
+read_h5ad <-function(file,
+                     assay_name,
+                     target.object){
+   rfile = system.file(package = 'dior')
+   py_script = paste0('python ', rfile, '/inst/python/diorPy.py -f ', file, ' -a ', assay_name)
+   system(py_script)
+   data = read_h5(file = gsub('.h5ad', '_tmp.h5', file), target.object = target.object)
+   return(data)
+}
 
 
 
