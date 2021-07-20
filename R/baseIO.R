@@ -362,14 +362,26 @@ read_h5part <- function(h5, groups){
 }
 
 #--- read the h5ad
+#' reading the h5ad file
+#' @param file the file name
+#' @param assay_name the assay_name
+#' @param target.object the target.object name
+#'
+#' @export
 read_h5ad <-function(file,
                      assay_name,
                      target.object){
-   rfile = system.file(package = 'dior')
-   py_script = paste0('python ', rfile, '/inst/python/diorPy.py -f ', file, ' -a ', assay_name)
-   system(py_script)
-   data = read_h5(file = gsub('.h5ad', '_tmp.h5', file), target.object = target.object)
-   return(data)
+
+  rfile = paste0(system.file(package = 'dior'), '/python/diorPy.py')
+  if(file.exists(rfile)){
+    rfile = rfile
+  }else{
+    rfile = paste0(system.file(package = 'dior'), '/inst/python/diorPy.py')
+  }
+  py_script = paste0('python ', rfile, ' -f ', file, ' -a ', assay_name)
+  system(py_script)
+  data = read_h5(file = gsub('.h5ad', '_tmp.h5', file), target.object = target.object)
+  return(data)
 }
 
 
