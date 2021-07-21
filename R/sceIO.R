@@ -112,6 +112,7 @@ sce_read_h5 <- function(file=NULL, assay.name = NULL){
 #' H5 file is converted to the singlecellexperiment obejct
 #' @param h5 The h5 file in R
 #' @param assay.name 'assay.name' is used to flag the data type, and the default is "RNA", meaning this is scRNA-seq data.
+#' @param use.data using the scanpy the data.X slot
 #' @importFrom hdf5r H5File h5attr
 #'
 h5_to_sce <- function(h5, assay.name = 'RNA',use.data ='X'){

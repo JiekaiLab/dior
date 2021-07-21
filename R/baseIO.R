@@ -6,7 +6,7 @@ library(Matrix)
 
 #' Data frame to h5
 #'
-#' Data frame is converted to and saved the h5 file
+#' Data frame is converted to the h5 file
 #' @param df Data frame of cell annotation or gene annotation
 #' @param h5 The h5 file
 #' @param gr_name The group name represents the property of the data frame.
@@ -154,9 +154,9 @@ matrix_to_h5 <- function(mat, h5, gr_name = NULL, save.obs.name = FALSE, save.va
 #'
 #' H5 group is converted to usable matrice including dense matrices and sparse matrices.
 #' Dense matrices(by R) and sparse matrices(constructed by Matrix package)
-#' @param h5 The name of the group the stores the matrix data in h5 file
-#' @param obs_names The observes names, such as cell names
-#' @param var_names The variables names, such as gene names
+#' @param h5mat The name of the group the stores the matrix data in h5 file
+#' @param obs.name The observes names, such as cell names
+#' @param var.name The variables names, such as gene names
 #' @return dense matrix or sparse matrix
 #' @importFrom hdf5r H5File h5attr
 #' @export
@@ -191,14 +191,22 @@ h5_to_matrix <-  function(h5mat, obs.name=NULL, var.name=NULL){
   return(mat)
 }
 
-# h5[['obs']] file transform obs information
+#' h5[['obs']] file transform obs information
+#'
+#' h5[['obs']] file transform obs information
+#' @param h5 The h5 file
+#'
 to_obs_ <- function(h5){
   to_obs <- h5_to_df(h5df = h5[['obs']])
   return(to_obs)
 }
 
-# h5[['var]] file transform var information
-to_var_ <- function(h5, use.raw = FALSE){
+#' h5[['var]] file transform var information
+#'
+#' h5[['var]] file transform var information
+#' @param h5 The h5 file
+#'
+to_var_ <- function(h5){
   to_var <- list()
   var = h5[['var']]
   for(v in names(var)){
@@ -207,7 +215,11 @@ to_var_ <- function(h5, use.raw = FALSE){
   return(to_var)
 }
 
-# h5[['graphs']] file transform graphs information
+#' h5[['graphs']] file transform graphs information
+#'
+#' h5[['graphs']] file transform graphs information
+#' @param h5 The h5 file
+#'
 to_graphs_ <- function(h5){
   to_graphs <- list()
   graphs <- h5[['graphs']]
@@ -218,7 +230,11 @@ to_graphs_ <- function(h5){
   return(to_graphs)
 }
 
-# h5[['data']] file transform data information
+#' h5[['data']] file transform data information
+#'
+#' h5[['data']] file transform data information
+#' @param h5 The h5 file
+#'
 to_data_ <- function(h5){
   to_data <- list()
   data <- h5[['data']]
@@ -228,7 +244,11 @@ to_data_ <- function(h5){
   return(to_data)
 }
 
-# h5[['layers']] file transform the layer information
+#' h5[['layers']] file transform the layer information
+#'
+#' h5[['layers']] file transform the layer information
+#' @param h5 The h5 file
+#'
 to_layers_ <- function(h5){
   to_layers <- list()
   layers <- h5[['layers']]
@@ -238,7 +258,11 @@ to_layers_ <- function(h5){
   return(to_layers)
 }
 
-# h5[['uns']] file transform the uns information
+#' h5[['uns']] file transform the uns information
+#'
+#' h5[['uns']] file transform the uns information
+#' @param h5 The h5 file
+#'
 to_uns_ <- function(h5){
   colors_list = list()
   for(colr in grep('colors', names(h5[['uns']]), value = TRUE)){
@@ -247,7 +271,11 @@ to_uns_ <- function(h5){
   return(colors_list)
 }
 
-# h5[['dimR']] file transform the dimr information
+#' h5[['dimR']] file transform the dimr information
+#'
+#' h5[['dimR']] file transform the dimr information
+#' @param h5 The h5 file
+#'
 to_dimr_ <- function(h5){
   to_dimr <- list()
   dimr <- h5[['dimR']]
@@ -258,7 +286,11 @@ to_dimr_ <- function(h5){
   return(to_dimr)
 }
 
-# h5[['dimR']] file transform the dimr information of seurat object
+#' h5[['dimR']] file transform the dimr information of seurat object
+#'
+#' h5[['dimR']] file transform the dimr information of seurat object
+#' @param h5 The h5 file
+#'
 seurat.to_dimr_ <- function(h5){
   to_dimr <- list()
   dimr <- h5[['dimR']]
@@ -268,12 +300,15 @@ seurat.to_dimr_ <- function(h5){
   return(to_dimr)
 }
 
-# h5[['spatial']] file transforma the spatial information of seurat object
+#' h5[['spatial']] file transforma the spatial information of seurat object
+#'
+#' h5[['spatial']] file transforma the spatial information of seurat object
+#' @param h5 The h5 file
+#'
 seurat.to_spatial_ <- function(h5){
   to_spatial <- h5_to_spatial(h5[['spatial']])
   return(to_spatial)
 }
-
 
 #--- read h5 file
 
@@ -313,23 +348,24 @@ read_h5 <- function(file, target.object = 'seurat', assay.name = 'RNA'){
 #' The scRNAs-seq analysis objec to H5
 #'
 #' Write h5 and  the scRNA-seq analysis object converted to h5
+#' @param data The scRNA-seq analysis object data.
+#' @param file The h5 file
 #' @param object.type Denotes which object to save.Available options are:
 #' \itemize{
 #'   \item "seurat": converted the "seurat object" to the h5 file.
 #'   \item "singlecellexperiment": converted the "singlecellexperiment object" to the h5 file.
 #'   \item "monocle": converted the "monocle3 object" to the h5 file.
 #' }
-#' @param data The scRNA-seq analysis object data.
-#' @param file The h5 file
 #' @param assay.name 'assay.name' is used to flag the data type. Defualt is "RNA". Available options are:
 #' \itemize{
 #'   \item "RNA": this is the scRNA-seq data.
 #'   \item "spatial": this is the spatial data.}
-#' @param save.graphs Default is False , determing whether to save the graph(cell-cell similarity network).
+#' @param save.graphs Default is TRUE , determing whether to save the graph(cell-cell similarity network).
 #'   seurat graph is different from scanpy graph. Their relationship are set {"distances": "knn", "connectivities": "snn"} roughly.
+#' @param save.scale Default is FALSE, determint whether to save the scale.data(dense matrix)
 #' @export
 #'
-write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', save.graphs = FALSE, save.scale=FALSE){
+write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', save.graphs = TRUE, save.scale=FALSE){
   if(object.type == 'seurat'){
     seurat_write_h5(seurat = data, file = file, assay.name = assay.name, save.graphs = save.graphs, save.scale = save.scale)
   }
@@ -341,9 +377,11 @@ write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', sav
 
 #--- read_h5 part
 
-#' The read the some data in the h5 fiel
+#' The read the some data in the h5 file
+#'
 #' @param h5 the h5 file
 #' @param groups the h5 groups
+#' @return The list contains the core data for single-cell information
 #'
 #' @export
 read_h5part <- function(h5, groups){
@@ -361,8 +399,8 @@ read_h5part <- function(h5, groups){
   return(h5_list)
 }
 
-#--- read the h5ad
 #' reading the h5ad file
+#'
 #' @param file the file name
 #' @param assay_name the assay_name
 #' @param target.object the target.object name

@@ -1,5 +1,5 @@
 # dior
-single-cell data IO between R and Python (R version)
+The package dior is the part of scDIOR, which are used for single-cell data IO between R and Python (R version)
 
 
 

@@ -10,6 +10,8 @@ h5_to_sce(h5, assay.name = "RNA", use.data = "X")
 \item{h5}{The h5 file in R}
 
 \item{assay.name}{'assay.name' is used to flag the data type, and the default is "RNA", meaning this is scRNA-seq data.}
+
+\item{use.data}{using the scanpy the data.X slot}
 }
 \description{
 H5 file is converted to the singlecellexperiment obejct

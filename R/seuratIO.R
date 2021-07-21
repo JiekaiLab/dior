@@ -6,9 +6,11 @@ library(hdf5r)
 library(Matrix)
 library(Hmisc)
 
-# --- seurat read the H5 file
-
-# seurat insert the dimr information
+#' seurat insert the dimr information
+#'
+#' @param seurat The seruat object
+#' @param seurat_list The list will be inserted to the seurat
+#'
 seurat.insert_dimr_ <- function(seurat, seurat_list){
   for(dr in names(seurat_list[['dimR']])){
     seurat@reductions[[dr]] <- seurat_list[['dimR']][[dr]]
@@ -17,13 +19,21 @@ seurat.insert_dimr_ <- function(seurat, seurat_list){
   return(seurat)
 }
 
-# seurat insert the spatial information
+#' seurat insert the spatial information
+#'
+#' @param seurat The seruat object
+#' @param seurat_list The list will be inserted to the seurat
+#'
 seurat.insert_spatial_ <- function(seurat, seurat_list){
   seurat@images <- seurat_list[['spatial']]
   return(seurat)
 }
 
-# seurat insert the graphs information
+#' seurat insert the graphs information
+#'
+#' @param seurat The seruat object
+#' @param seurat_list The list will be inserted to the seurat
+#'
 seurat.insert_graphs_ <- function(seurat, seurat_list){
   for(g in names(seurat_list[['graphs']])){
     rownames(seurat_list[['graphs']][[g]]) <- rownames(seurat[[]])
@@ -33,13 +43,21 @@ seurat.insert_graphs_ <- function(seurat, seurat_list){
   return(seurat)
 }
 
-# seurat insert the uns information
+#' seurat insert the uns information
+#'
+#' @param seurat The seruat object
+#' @param seurat_list The list will be inserted to the seurat
+#'
 seurat.insert_uns_ <- function(seurat, seurat_list){
   seurat@misc <- seurat_list[['uns']]
   return(seurat)
 }
 
-# seurat insert the layers information
+#' seurat insert the layers information
+#'
+#' @param seurat The seruat object
+#' @param seurat_list The list will be inserted to the seurat
+#'
 seurat.insert_layers_ <- function(seurat, seurat_list){
   for(l in names(seurat_list[['layers']])){
     rownames(seurat_list[['layers']][[l]]) <- rownames(seurat_list[['var']][['X']])
@@ -139,12 +157,13 @@ h5_to_seurat <- function(h5, assay.name){
 #' \itemize{
 #'   \item "RNA": this is the scRNA-seq data.
 #'   \item "spatial": this is the spatial data.}
-#' @param save.graphs Default is False , determing whether to save the graph(cell-cell similarity network).
+#' @param save.graphs Default is TRUE , determing whether to save the graph(cell-cell similarity network).
 #'   seurat graph is different from scanpy graph. Their relationship are set {"distances": "knn", "connectivities": "snn"} roughly.
+#' @param save.scale Default is FALSE, determint whether to save the scale.data(dense matrix)
 #' @importFrom hdf5r H5File h5attr
 #' @export
 #'
-seurat_write_h5 <- function(seurat = NULL, file = NULL, assay.name = NULL, save.graphs = FALSE, save.scale = FALSE){
+seurat_write_h5 <- function(seurat = NULL, file = NULL, assay.name = NULL, save.graphs = TRUE, save.scale = FALSE){
   if(is.null(file)){
     stop('No such file or directory')
   }
@@ -175,12 +194,13 @@ seurat_write_h5 <- function(seurat = NULL, file = NULL, assay.name = NULL, save.
 #' \itemize{
 #'   \item "RNA": this is the scRNA-seq data.
 #'   \item "spatial": this is the spatial data.}
-#' @param save.graphs Default is False , determing whether to save the graph(cell-cell similarity network).
+#' @param save.graphs Default is TRUE , determing whether to save the graph(cell-cell similarity network).
 #'   seurat graph is different from scanpy graph. Their relationship are set {"distances": "knn", "connectivities": "snn"} roughly.
+#' @param save.scale Default is FALSE, determint whether to save the scale.data(dense matrix)
 #' @importFrom hdf5r H5File h5attr
 #' @importFrom Hmisc capitalize
 #'
-seurat_to_h5 <- function(seurat=NULL, h5=NULL, assay.name = NULL, save.graphs = FALSE, save.scale = FALSE){
+seurat_to_h5 <- function(seurat=NULL, h5=NULL, assay.name = NULL, save.graphs = TRUE, save.scale = FALSE){
   data = h5$create_group('data')
   var = h5$create_group('var')
   if(assay.name == 'spatial'){
@@ -275,7 +295,6 @@ VisiumV1 <- setClass(
   contains = 'SpatialImage',
   slots = list(
     'image' = 'array',
-
     'scale.factors' = 'scalefactors',
     'coordinates' = 'data.frame',
     'spot.radius' = 'numeric'
@@ -287,7 +306,7 @@ VisiumV1 <- setClass(
 #'
 #' @param data The seruat object
 #' @param h5 The h5 file
-#' @param assay.name 'assay.name' must be the 'spatial' for saving the spatial message.
+#' @param gr_name 'gr.name' must be the 'spatial' for saving the spatial message.
 #' @importFrom hdf5r H5File h5attr
 #'
 seurat_spatial_to_h5 <- function(data, h5, gr_name = 'spatial'){

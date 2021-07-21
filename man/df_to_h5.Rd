@@ -14,5 +14,5 @@ df_to_h5(df, h5, gr_name = NULL)
 \item{gr_name}{The group name represents the property of the data frame.}
 }
 \description{
-Data frame is converted to and saved the h5 file
+Data frame is converted to the h5 file
 }

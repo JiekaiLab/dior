@@ -11,7 +11,7 @@ seurat_spatial_to_h5(data, h5, gr_name = "spatial")
 
 \item{h5}{The h5 file}
 
-\item{assay.name}{'assay.name' must be the 'spatial' for saving the spatial message.}
+\item{gr_name}{'gr.name' must be the 'spatial' for saving the spatial message.}
 }
 \description{
 The spatial meassage to the h5 file(Seurat)

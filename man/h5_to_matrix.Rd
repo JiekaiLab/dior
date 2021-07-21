@@ -7,11 +7,11 @@
 h5_to_matrix(h5mat, obs.name = NULL, var.name = NULL)
 }
 \arguments{
-\item{h5}{The name of the group the stores the matrix data in h5 file}
+\item{h5mat}{The name of the group the stores the matrix data in h5 file}
 
-\item{obs_names}{The observes names, such as cell names}
+\item{obs.name}{The observes names, such as cell names}
 
-\item{var_names}{The variables names, such as gene names}
+\item{var.name}{The variables names, such as gene names}
 }
 \value{
 dense matrix or sparse matrix

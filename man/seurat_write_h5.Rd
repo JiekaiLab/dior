@@ -8,7 +8,7 @@ seurat_write_h5(
   seurat = NULL,
   file = NULL,
   assay.name = NULL,
-  save.graphs = FALSE,
+  save.graphs = TRUE,
   save.scale = FALSE
 )
 }
@@ -22,8 +22,10 @@ seurat_write_h5(
   \item "RNA": this is the scRNA-seq data.
   \item "spatial": this is the spatial data.}}
 
-\item{save.graphs}{Default is False , determing whether to save the graph(cell-cell similarity network).
+\item{save.graphs}{Default is TRUE , determing whether to save the graph(cell-cell similarity network).
 seurat graph is different from scanpy graph. Their relationship are set {"distances": "knn", "connectivities": "snn"} roughly.}
+
+\item{save.scale}{Default is FALSE, determint whether to save the scale.data(dense matrix)}
 }
 \description{
 The Seurat object is converted to the h5 file.

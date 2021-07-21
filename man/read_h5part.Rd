@@ -2,7 +2,7 @@
 % Please edit documentation in R/baseIO.R
 \name{read_h5part}
 \alias{read_h5part}
-\title{The read the some data in the h5 fiel}
+\title{The read the some data in the h5 file}
 \usage{
 read_h5part(h5, groups)
 }
@@ -11,6 +11,9 @@ read_h5part(h5, groups)
 
 \item{groups}{the h5 groups}
 }
+\value{
+The list contains the core data for single-cell information
+}
 \description{
-The read the some data in the h5 fiel
+The read the some data in the h5 file
 }
