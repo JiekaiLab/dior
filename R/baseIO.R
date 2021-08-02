@@ -13,8 +13,44 @@ library(Matrix)
 #' @importFrom hdf5r H5File h5attr "h5attr<-" h5attr_names
 #' @export
 #'
+# df_to_h5 <- function(df, h5, gr_name=NULL){
+#   h5df <- h5$create_group(gr_name)
+#   h5df[['index']] = rownames(df)
+#   if(ncol(df)>0){
+#     h5df[['colnames']] = colnames(df)
+#   }
+#   # factor to levels,charactor to levels,logical to levels
+#   for(k in names(df)){
+#     if(is.factor(df[[k]])){
+#       e0 <- as.integer(df[[k]]) - 1L
+#       e0[is.na(e0)] <- -1 # -1 is na
+#       h5df[[k]]<- e0 # for 0 begin
+#
+#       h5df[[paste0(k,'_levels')]]<- levels(df[[k]])
+#       h5attr(h5df[[k]], 'origin_dtype') = 'category'
+#     }
+#     if(is.character(df[[k]])){
+#       str_to_lvl <- factor(df[[k]])
+#       e0 <- as.integer(str_to_lvl) - 1L
+#       e0[is.na(e0)] <- -1 # -1 is na
+#       h5df[[k]]<- e0
+#       h5df[[paste0(k,'_levels')]]<- levels(str_to_lvl)
+#       h5attr(h5df[[k]], 'origin_dtype') = 'string'
+#     }
+#     if(is.logical(df[[k]])){
+#       h5df[[k]] <- as.integer(df[[k]])
+#       h5attr(h5df[[k]], 'origin_dtype') = 'bool'
+#     }
+#     if(any(is.numeric(df[[k]]),is.integer(df[[k]]))){
+#       h5df[[k]] <- df[[k]]
+#       h5attr(h5df[[k]], 'origin_dtype') = 'number'
+#     }
+#   }
+# }
+
 df_to_h5 <- function(df, h5, gr_name=NULL){
   h5df <- h5$create_group(gr_name)
+  cate_list <- list()
   h5df[['index']] = rownames(df)
   if(ncol(df)>0){
     h5df[['colnames']] = colnames(df)
@@ -25,8 +61,7 @@ df_to_h5 <- function(df, h5, gr_name=NULL){
       e0 <- as.integer(df[[k]]) - 1L
       e0[is.na(e0)] <- -1 # -1 is na
       h5df[[k]]<- e0 # for 0 begin
-
-      h5df[[paste0(k,'_levels')]]<- levels(df[[k]])
+      cate_list[[k]] <- levels(df[[k]])
       h5attr(h5df[[k]], 'origin_dtype') = 'category'
     }
     if(is.character(df[[k]])){
@@ -34,7 +69,7 @@ df_to_h5 <- function(df, h5, gr_name=NULL){
       e0 <- as.integer(str_to_lvl) - 1L
       e0[is.na(e0)] <- -1 # -1 is na
       h5df[[k]]<- e0
-      h5df[[paste0(k,'_levels')]]<- levels(str_to_lvl)
+      cate_list[[k]] <- levels(str_to_lvl)
       h5attr(h5df[[k]], 'origin_dtype') = 'string'
     }
     if(is.logical(df[[k]])){
@@ -46,7 +81,15 @@ df_to_h5 <- function(df, h5, gr_name=NULL){
       h5attr(h5df[[k]], 'origin_dtype') = 'number'
     }
   }
+  if(length(names(cate_list))>0){
+    h5df_cate <- h5df$create_group('category')
+    for(ca in names(cate_list)){
+      h5df_cate[[ca]] <- cate_list[[ca]]
+    }
+  }
 }
+
+
 
 #' H5 to dataframe
 #'
@@ -66,14 +109,14 @@ h5_to_df <- function(h5df){
         e0 <- h5df[[k]][]
         e0[e0==-1] <- NA # -1 is na
         e0 <- e0 + 1L
-        lvl <- h5df[[paste0(k,'_levels')]][]
+        lvl <- h5df[['category']][[k]][]
         df_list[[k]] <- structure(.Data = e0, .Label = lvl, class = 'factor')
       }
       if(df_dtype == 'string'){
         e0 <- h5df[[k]][]
         e0[e0==-1] <- NA # -1 is na
         e0 <- e0 + 1L
-        lvl <- h5df[[paste0(k,'_levels')]][]
+        lvl <- h5df[['category']][[k]][]
         df_list[[k]] <- as.character(structure(.Data = e0, .Label = lvl, class = 'factor'))
       }
       if(df_dtype == 'bool'){
@@ -97,6 +140,48 @@ h5_to_df <- function(h5df){
   }
   return(df)
 }
+
+# h5_to_df <- function(h5df){
+#   df_list <- list()
+#   df_list[['index']] <- h5df[['index']][]
+#   for(k in names(h5df)){
+#     if(length(h5attr_names(h5df[[k]]))>0){
+#       df_dtype <- h5attr(h5df[[k]], 'origin_dtype')
+#       if(df_dtype == 'category'){
+#         e0 <- h5df[[k]][]
+#         e0[e0==-1] <- NA # -1 is na
+#         e0 <- e0 + 1L
+#         lvl <- h5df[[paste0(k,'_levels')]][]
+#         df_list[[k]] <- structure(.Data = e0, .Label = lvl, class = 'factor')
+#       }
+#       if(df_dtype == 'string'){
+#         e0 <- h5df[[k]][]
+#         e0[e0==-1] <- NA # -1 is na
+#         e0 <- e0 + 1L
+#         lvl <- h5df[[paste0(k,'_levels')]][]
+#         df_list[[k]] <- as.character(structure(.Data = e0, .Label = lvl, class = 'factor'))
+#       }
+#       if(df_dtype == 'bool'){
+#         df_list[[k]] <- as.logical(h5df[[k]][])
+#       }
+#       if(df_dtype == 'number'){
+#         df_list[[k]] <- h5df[[k]][]
+#       }
+#     }
+#   }
+#   df = as.data.frame(df_list, row.names = 'index', optional = TRUE)
+#   if('colnames' %in% names(h5df)){
+#     cnames <- h5df[['colnames']][]
+#     if(length(cnames) >1){
+#       df = df[,cnames]
+#     }else{
+#       df = df
+#     }
+#   }else{
+#     df=df
+#   }
+#   return(df)
+# }
 
 
 #' Matrix to H5 format
