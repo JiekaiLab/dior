@@ -464,12 +464,13 @@ write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', sav
 
 #' The read the some data in the h5 file
 #'
-#' @param h5 the h5 file
+#' @param file the h5 file
 #' @param groups the h5 groups
 #' @return The list contains the core data for single-cell information
 #'
 #' @export
-read_h5part <- function(h5, groups){
+read_h5part <- function(file, groups){
+  h5 <- H5File$new(filename = file, mode = 'r')
   h5_list <- list()
   for(h in groups){
     h5_list[[h]] <- switch(h, data = to_data_(h5),

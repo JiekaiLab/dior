@@ -4,10 +4,10 @@
 \alias{read_h5part}
 \title{The read the some data in the h5 file}
 \usage{
-read_h5part(h5, groups)
+read_h5part(file, groups)
 }
 \arguments{
-\item{h5}{the h5 file}
+\item{file}{the h5 file}
 
 \item{groups}{the h5 groups}
 }
