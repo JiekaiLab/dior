@@ -466,6 +466,7 @@ write_h5 <- function(data, file, object.type = 'seurat', assay.name = 'RNA', sav
 #'
 #' @param file the h5 file
 #' @param groups the h5 groups
+#' @importFrom hdf5r H5File h5attr
 #' @return The list contains the core data for single-cell information
 #'
 #' @export
