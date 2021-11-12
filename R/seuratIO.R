@@ -107,7 +107,7 @@ h5_to_seurat <- function(h5, assay.name){
       seurat_list[[h]] <- switch(h, data = to_data_(h5),
                                  obs = to_obs_(h5),
                                  var = to_var_(h5),
-                                 dimR = seurat.to_dimr_(h5),
+                                 dimR = seurat.to_dimr_(h5, assay.name=assay.name),
                                  layers = to_layers_(h5),
                                  graphs = to_graphs_(h5),
                                  spatial = seurat.to_spatial_(h5),
@@ -366,6 +366,8 @@ h5_to_spatial <- function(h5spa){
     spot.radius <- unnormalized.radius/max(dim(x = spatial_sid_list$image))
     spatial_list[[sid]] <- new(Class = "VisiumV1", image = spatial_sid_list$image, scale.factors = spatial_sid_list$scalefactors,
                                coordinates = spatial_sid_list$coor,spot.radius = spot.radius)
+    spatial_list[[sid]][[names(h5spa)]]@key <- names(h5spa)
+    spatial_list[[sid]][[names(h5spa)]]@assay <- 'Spatial'
   }
   return(spatial_list)
 }

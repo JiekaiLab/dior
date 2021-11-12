@@ -3,6 +3,7 @@
 # packages
 library(hdf5r)
 library(Matrix)
+library(Hmisc)
 
 #' Data frame to h5
 #'
@@ -375,12 +376,16 @@ to_dimr_ <- function(h5){
 #'
 #' h5[['dimR']] file transform the dimr information of seurat object
 #' @param h5 The h5 file
+#' @param assay.name The assay.name
 #'
-seurat.to_dimr_ <- function(h5){
+seurat.to_dimr_ <- function(h5, assay.name){
+  if(assay.name == 'spatial'){
+    assay.name <- capitalize(assay.name)
+  }
   to_dimr <- list()
   dimr <- h5[['dimR']]
   for(DR in names(dimr)){
-    to_dimr[[tolower(DR)]] <- Seurat::CreateDimReducObject(embeddings = t(dimr[[DR]][,]), key = paste0(DR, "_"), assay = "RNA")
+    to_dimr[[tolower(DR)]] <- Seurat::CreateDimReducObject(embeddings = t(dimr[[DR]][,]), key = paste0(DR, "_"), assay = assay.name)
   }
   return(to_dimr)
 }

@@ -1,7 +1,7 @@
 Package: dior
 Type: Package
 Title: The scRNA-seq data IO between R and Python(R version)
-Version: 0.1.4
+Version: 0.1.5
 Authors@R: person("Huijian", "Feng", email="fenghuijian@outlook.com", role=c("aut", "cre"))
 Description: The scRNA-seq data IO between R and Python(R version). The scRNA-seq data mainly including the counts, log data, 
     cell annotation, gene annotation and dimension reduction can be used to IO via an HDF5 file. In the case of big data, this
