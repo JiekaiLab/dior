@@ -366,8 +366,8 @@ h5_to_spatial <- function(h5spa){
     spot.radius <- unnormalized.radius/max(dim(x = spatial_sid_list$image))
     spatial_list[[sid]] <- new(Class = "VisiumV1", image = spatial_sid_list$image, scale.factors = spatial_sid_list$scalefactors,
                                coordinates = spatial_sid_list$coor,spot.radius = spot.radius)
-    spatial_list[[sid]][[names(h5spa)]]@key <- names(h5spa)
-    spatial_list[[sid]][[names(h5spa)]]@assay <- 'Spatial'
+    spatial_list[[sid]]@key <- names(h5spa)
+    spatial_list[[sid]]@assay <- 'Spatial'
   }
   return(spatial_list)
 }
