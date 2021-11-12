@@ -131,7 +131,6 @@ h5_to_seurat <- function(h5, assay.name){
     seurat@assays[[assay.name]]@meta.features <- seurat_list[['var']][['X']]
   }
   seurat@meta.data <- seurat_list[['obs']]
-  seurat@misc <- seurat_list[['uns']]
   for(sl in names(seurat_list)){
     seurat <- switch(sl,
                      data = seurat,
